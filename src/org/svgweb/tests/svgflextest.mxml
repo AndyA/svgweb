@@ -9,9 +9,12 @@
   >
   <mx:Script>
     <![CDATA[
-    private function myInit():void {               
+		import mx.core.FlexGlobals;
+		
+		private function myInit():void {               
         // The FlashVars
-        var obj:Object = Application.application.parameters;
+        var obj:Object = FlexGlobals.topLevelApplication.parameters;
+
         var item:String;
 
         for (item in obj) {
