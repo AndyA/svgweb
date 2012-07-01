@@ -1,0 +1,136 @@
+# [% warning %]
+ServerName [% domain %]
+ServerRoot [% home %]
+DocumentRoot [% www %]
+PidFile logs/httpd[% suffix %].pid
+LockFile logs/httpd[% suffix %].lock
+TypesConfig [% home %]/conf/mime.types
+
+Listen [% apache_host %]:[% apache_port %]
+NameVirtualHost [% apache_host %]:[% apache_port %]
+
+<IfModule !authz_host_module>
+  LoadModule authz_host_module [% modules %]/mod_authz_host.so
+</IfModule>
+
+<IfModule !mime_module>
+  LoadModule mime_module [% modules %]/mod_mime.so
+</IfModule>
+
+<IfModule !negotiation_module>
+  LoadModule negotiation_module [% modules %]/mod_negotiation.so
+</IfModule>
+
+<IfModule !setenvif_module>
+  LoadModule setenvif_module [% modules %]/mod_setenvif.so
+</IfModule>
+
+<IfModule !alias_module>
+  LoadModule alias_module [% modules %]/mod_alias.so
+</IfModule>
+
+<IfModule !autoindex_module>
+  LoadModule autoindex_module [% modules %]/mod_autoindex.so
+</IfModule>
+
+<IfModule !dir_module>
+  LoadModule dir_module [% modules %]/mod_dir.so
+</IfModule>
+
+<IfModule !php5_module>
+  LoadModule php5_module        [% modules %]/libphp5.so
+</IfModule>
+
+<IfModule !log_config_module>
+  LoadModule log_config_module [% modules %]/mod_log_config.so
+</IfModule>
+
+ServerAdmin andy.armstrong@bbc.co.uk
+
+<Directory />
+  Options FollowSymLinks
+  AllowOverride None
+  Order allow,deny
+  Allow from all
+</Directory>
+
+<FilesMatch "^\.ht">
+  Order allow,deny
+  Deny from all
+  Satisfy All
+</FilesMatch>
+
+ErrorLog logs/error_log[% suffix %]
+LogLevel warn
+
+<IfModule log_config_module>
+  LogFormat "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"" combined
+  LogFormat "%h %l %u %t \"%r\" %>s %b" common
+  CustomLog logs/access_log[% suffix %] combined
+</IfModule>
+
+DefaultType text/plain
+
+<IfModule mime_module>
+  AddType application/x-compress  .Z
+  AddType application/x-gzip      .gz .tgz
+  AddType application/x-httpd-php .php 
+</IfModule>
+
+User [% uid %]
+Group [% gid %]
+
+AddLanguage ca .ca
+AddLanguage cs .cz .cs
+AddLanguage da .dk
+AddLanguage de .de
+AddLanguage el .el
+AddLanguage en .en
+AddLanguage eo .eo
+AddLanguage es .es
+AddLanguage et .et
+AddLanguage fr .fr
+AddLanguage he .he
+AddLanguage hr .hr
+AddLanguage it .it
+AddLanguage ja .ja
+AddLanguage ko .ko
+AddLanguage ltz .ltz
+AddLanguage nl .nl
+AddLanguage nn .nn
+AddLanguage no .no
+AddLanguage pl .po
+AddLanguage pt .pt
+AddLanguage pt-BR .pt-br
+AddLanguage ru .ru
+AddLanguage sv .sv
+AddLanguage zh-CN .zh-cn
+AddLanguage zh-TW .zh-tw
+
+LanguagePriority en ca cs da de el eo es et fr he hr it ja ko ltz nl nn no pl pt pt-BR ru sv zh-CN zh-TW
+
+ForceLanguagePriority Prefer Fallback
+
+AddDefaultCharset UTF-8
+
+BrowserMatch "Mozilla/2" nokeepalive
+BrowserMatch "MSIE 4\.0b2;" nokeepalive downgrade-1.0 force-response-1.0
+BrowserMatch "RealPlayer 4\.0" force-response-1.0
+BrowserMatch "Java/1\.0" force-response-1.0
+BrowserMatch "JDK/1\.0" force-response-1.0
+
+BrowserMatch "Microsoft Data Access Internet Publishing Provider" redirect-carefully
+BrowserMatch "MS FrontPage" redirect-carefully
+BrowserMatch "^WebDrive" redirect-carefully
+BrowserMatch "^WebDAVFS/1.[0123]" redirect-carefully
+BrowserMatch "^gnome-vfs/1.0" redirect-carefully
+BrowserMatch "^XML Spy" redirect-carefully
+BrowserMatch "^Dreamweaver-WebDAV-SCM1" redirect-carefully
+
+<Directory "[% www %]">
+  Options +Indexes
+  Allow from all
+  DirectoryIndex index.html
+</Directory>
+
+# vim:ts=2:sw=2:sts=2:et:ft=apache
